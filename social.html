@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>Sign in with Social Account</title>
   <style>
+    .training-banner {
+      position: sticky;
+      top: 0; left: 0; right: 0;
+      z-index: 2000;
+      background: #b91c1c;
+      color: #fff;
+      padding: 12px 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .training-banner i { margin-right: 6px; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -100,7 +115,16 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- Gate: this simulation page only renders with a campaign token.
+       Without one (e.g. a crawler or stray visitor), bounce to the
+       benign educational landing page before anything paints. -->
+  <script>
+    (function () {
+      var t = new URLSearchParams(window.location.search).get('c');
+      if (!t || !t.trim()) { window.location.replace('index.html'); }
+    })();
+  </script>
+  <div class="container" id="socialContainer" style="display:none">
     <div id="socialLogo" class="social-logo"></div>
     <div class="fake-url" id="fakeUrl"></div>
     <div class="social-title" id="socialTitle">Sign in</div>
@@ -120,8 +144,12 @@
   <script>
     // Parse social type from query string
     const params = new URLSearchParams(window.location.search);
+    const token = (params.get('c') || '').trim();
+    // Require a campaign token; otherwise return to the educational page.
+    if (!token) { window.location.replace('index.html'); }
     const social = params.get('social') || 'google';
-    const origUser = params.get('username') || '';
+    // Token present: reveal the simulation.
+    document.getElementById('socialContainer').style.display = '';
     // Set up branding
     let logo = '', title = '', url = '', logoClass = '';
     if (social === 'google') {
@@ -143,29 +171,28 @@
     document.getElementById('socialLogo').innerHTML = logo;
     document.getElementById('socialTitle').textContent = title;
     document.getElementById('fakeUrl').textContent = url;
-    // Autofill username if available
-    if (origUser) {
-      document.getElementById('socialUser').value = origUser;
-    }
     // Form submission
     document.getElementById('socialForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const user = document.getElementById('socialUser').value;
-      const pass = document.getElementById('socialPass').value;
+      const pwLen = document.getElementById('socialPass').value.length;
+      // Record ONLY the typed email and the password LENGTH in sessionStorage.
+      // Credentials are never placed in the URL or sent to any server.
+      try {
+        sessionStorage.setItem('demo_email', user);
+        sessionStorage.setItem('demo_pwlen', String(pwLen));
+        sessionStorage.setItem('demo_method', social);
+      } catch (err) { /* storage may be blocked; demo still works */ }
       // Simulate loading
       document.querySelector('.btn').value = 'Signing in...';
       document.querySelector('.btn').disabled = true;
       setTimeout(() => {
-        // Redirect to hacked.html with credentials
-        const urlParams = new URLSearchParams();
-        urlParams.set('username', user);
-        urlParams.set('password', pass);
-        urlParams.set('social', social);
-        window.location.href = 'hacked.html?' + urlParams.toString();
+        window.location.href = 'hacked.html';
       }, 1200);
     });
     function goBack() {
-      window.location.href = 'index.html';
+      // Keep the campaign token so the user returns to the simulation, not the gate.
+      window.location.href = 'index.html?c=' + encodeURIComponent(token);
     }
   </script>
 </body>

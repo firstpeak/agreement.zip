@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DVRQ1YHST6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-DVRQ1YHST6');
-    </script>
-
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Security Awareness - You've Been Educated!</title>
     <style>
@@ -25,6 +17,20 @@
       align-items: center;
       justify-content: center;
     }
+
+    .training-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 2000;
+      background: #b91c1c;
+      color: #fff;
+      padding: 12px 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .training-banner i { margin-right: 6px; }
 
     .container {
       background: white;
@@ -210,38 +216,54 @@
     </style>
   </head>
   <body>
+    <div class="training-banner" role="alert">
+      <i class="fa fa-graduation-cap"></i>
+      <strong>SECURITY AWARENESS TRAINING SIMULATION.</strong>
+      No credentials were collected, logged, or transmitted. Everything below is shown locally in your own browser.
+    </div>
     <div class="container">
       <div class="warning-icon">
         <i class="fa fa-exclamation-triangle"></i>
       </div>
-      
+
       <h1>⚠️ Security Awareness Alert!</h1>
-      <p class="subtitle">This was a phishing simulation - but you would have been compromised!</p>
+      <p class="subtitle">This was a phishing simulation &mdash; on a real malicious site, you would have just been compromised.</p>
 
       <div class="captured-data">
         <h3>
           <i class="fa fa-database"></i>
-          Data That Would Have Been Stolen:
+          What a real phishing site would have captured:
         </h3>
+        <p style="margin-top:0; font-size:13px; color:#6c757d;">
+          The items below are reconstructed <strong>only in your browser</strong> to make the lesson concrete.
+          Nothing here was sent to or stored on any server.
+        </p>
         <div class="data-item" id="usernameData">
-          <strong>Email/Username:</strong> <span id="capturedUsername">Not provided</span>
+          <strong>Email/Username you entered:</strong> <span id="capturedUsername">Not provided</span>
         </div>
         <div class="data-item" id="passwordData">
-          <strong>Password:</strong> <span id="capturedPassword">Not provided</span>
+          <strong>Your password:</strong> <span id="capturedPassword">Not provided</span>
         </div>
         <div class="data-item">
-          <strong>IP Address:</strong> <span id="userIP">Detecting...</span>
+          <strong>Network / IP address:</strong>
+          <span>Any site you visit can see your IP address and approximate location.</span>
         </div>
         <div class="data-item">
-          <strong>Browser:</strong> <span id="userAgent"></span>
+          <strong>Device &amp; browser fingerprint:</strong> <span id="userAgent"></span>
         </div>
         <div class="data-item">
           <strong>Timestamp:</strong> <span id="timestamp"></span>
         </div>
-        <div class="data-item">
-          <strong>CAPTCHA Response:</strong> <span id="captchaResponse">User bypassed security check</span>
-        </div>
       </div>
+
+      <p style="font-size:14px; color:#495057;">
+        Want to see exactly what your browser reveals to any website?
+        The EFF's free <strong>Cover Your Tracks</strong> tool shows the data that could be collected about you:
+        <br>
+        <a href="https://coveryourtracks.eff.org/" target="_blank" rel="noopener">
+          <i class="fa fa-external-link"></i> coveryourtracks.eff.org
+        </a>
+      </p>
 
       <div class="stats">
         <div class="stat-item">
@@ -294,8 +316,11 @@
       </div>
 
       <div class="footer-actions">
-        <a href="https://www.cisa.gov/news-events/news/avoiding-social-engineering-and-phishing-attacks" class="btn btn-primary" target="_blank">
+        <a href="https://www.cisa.gov/news-events/news/avoiding-social-engineering-and-phishing-attacks" class="btn btn-primary" target="_blank" rel="noopener">
           <i class="fa fa-graduation-cap"></i> Learn More About Phishing
+        </a>
+        <a href="https://ssd.eff.org/module/how-to-avoid-phishing-attacks" class="btn btn-primary" target="_blank" rel="noopener">
+          <i class="fa fa-shield"></i> EFF: How to Avoid Phishing
         </a>
         <button onclick="startOver()" class="btn btn-secondary">
           <i class="fa fa-refresh"></i> Try Again
@@ -304,59 +329,52 @@
     </div>
 
     <script>
-      // Extract and display captured data
-      const params = new URLSearchParams(window.location.search);
-      const username = params.get("username");
-      const password = params.get("password");
-      const social = params.get("social");
-      
-      // Display captured credentials
-      if (username) {
-        document.getElementById("capturedUsername").textContent = username;
-        document.getElementById("capturedUsername").style.color = "#dc3545";
-        document.getElementById("capturedUsername").style.fontWeight = "bold";
-      }
-      if (password) {
-        document.getElementById("capturedPassword").textContent = "*".repeat(password.length) + " (hidden for security)";
-        document.getElementById("capturedPassword").style.color = "#dc3545";
-        document.getElementById("capturedPassword").style.fontWeight = "bold";
-      }
-      if (social) {
-        document.getElementById("capturedUsername").textContent += `\n(via ${social.charAt(0).toUpperCase() + social.slice(1)})`;
+      // This page reads ONLY from sessionStorage, which the demo set on this same
+      // device. There are no credentials in the URL, no network calls, and no
+      // tracking. sessionStorage is cleared when the browser tab is closed.
+      let email = "", pwLen = 0, method = "";
+      try {
+        email = sessionStorage.getItem("demo_email") || "";
+        pwLen = parseInt(sessionStorage.getItem("demo_pwlen") || "0", 10) || 0;
+        method = sessionStorage.getItem("demo_method") || "";
+        // Clear immediately so nothing lingers.
+        sessionStorage.removeItem("demo_email");
+        sessionStorage.removeItem("demo_pwlen");
+        sessionStorage.removeItem("demo_method");
+      } catch (err) { /* storage may be unavailable */ }
+
+      // Display the email that was typed (reconstructed locally only).
+      if (email) {
+        let label = email;
+        if (method && method !== "email") {
+          label += ` (via ${method.charAt(0).toUpperCase() + method.slice(1)})`;
+        }
+        const u = document.getElementById("capturedUsername");
+        u.textContent = label;
+        u.style.color = "#dc3545";
+        u.style.fontWeight = "bold";
       }
 
-      // Display browser info
-      document.getElementById("userAgent").textContent = navigator.userAgent.split(" ").slice(0, 3).join(" ") + "...";
-      
-      // Display timestamp
+      // Represent the password only as its length — the password itself is never
+      // stored, echoed, or transmitted.
+      if (pwLen > 0) {
+        const p = document.getElementById("capturedPassword");
+        p.textContent = "•".repeat(Math.min(pwLen, 32)) + `  (${pwLen} characters — never captured)`;
+        p.style.color = "#dc3545";
+        p.style.fontWeight = "bold";
+      }
+
+      // Show a short, non-identifying browser description to illustrate fingerprinting.
+      document.getElementById("userAgent").textContent =
+        navigator.userAgent.split(" ").slice(0, 3).join(" ") + "…";
+
+      // Local timestamp.
       document.getElementById("timestamp").textContent = new Date().toLocaleString();
-
-      // Simulate IP detection (in real scenario, this would be server-side)
-      fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById("userIP").textContent = data.ip;
-        })
-        .catch(() => {
-          document.getElementById("userIP").textContent = "Could not detect (blocked by browser)";
-        });
 
       // Function to restart the simulation
       function startOver() {
-        if (confirm("Are you sure you want to restart the simulation?")) {
-          window.location.href = "index.html";
-        }
+        window.location.href = "index.html";
       }
-
-      // Add some educational interactions
-      document.addEventListener('DOMContentLoaded', function() {
-        // Highlight the severity if credentials were provided
-        if (username || password) {
-          setTimeout(() => {
-            alert("🚨 CRITICAL: In a real attack, your credentials would now be in the hands of cybercriminals!\n\nThey could:\n• Access your accounts\n• Steal your identity\n• Access your financial information\n• Compromise your organization's security");
-          }, 2000);
-        }
-      });
     </script>
   </body>
 </html>

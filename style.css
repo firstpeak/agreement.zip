@@ -11,6 +11,25 @@ body {
   box-sizing: border-box;
 }
 
+/* Training Disclaimer Banner */
+.training-banner {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  background: #b91c1c;
+  color: #fff;
+  padding: 12px 18px;
+  margin: -20px -20px 20px -20px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.training-banner i { margin-right: 6px; }
+.training-banner u { text-underline-offset: 2px; }
+
 .security-badge {
   position: fixed;
   top: 10px;
